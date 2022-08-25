@@ -8,9 +8,6 @@ edition = "2018"
 [dependencies]
 arrayvec = { version = "0.7.1", default-features = false }
 
-[target.thumbv6m-none-eabi.dependencies]
-nanos_sdk = { git = "https://github.com/LedgerHQ/ledger-nanos-sdk.git" } 
-
 [target.'cfg(target_family = "bolos")'.dependencies]
 nanos_sdk = { git = "https://github.com/LedgerHQ/ledger-nanos-sdk.git" }
 
