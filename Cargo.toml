@@ -1,6 +1,6 @@
 [package]
 name = "ledger-log"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -8,7 +8,7 @@ edition = "2018"
 [dependencies]
 arrayvec = { version = "0.7.1", default-features = false }
 
-[target.thumbv6m-none-eabi.dependencies]
+[target.'cfg(target_family = "bolos")'.dependencies]
 nanos_sdk = "*"
 
 [features]
