@@ -1,11 +1,13 @@
 #![cfg_attr(target_family = "bolos", no_std)]
+#[cfg(not(all(
+    target_family = "nanos",
+    not(any(feature = "speculos", feature = "debug_mcu_print"))
+)))]
+use core::fmt::Write;
 #[cfg(all(target_family = "bolos", feature = "speculos"))]
 use nanos_sdk::debug_print;
-#[cfg(not(all(target_family = "nanos", not(any(feature = "speculos", feature = "debug_mcu_print")))))]
-use core::fmt::Write;
 
 pub struct DBG;
-
 
 #[cfg(all(target_family = "bolos", feature = "speculos"))]
 impl Write for DBG {
@@ -22,18 +24,26 @@ impl Write for DBG {
     }
 }
 
-#[cfg(all(target_family = "nanos", feature = "debug_mcu_print", not(feature = "speculos")))]
+#[cfg(all(
+    target_family = "nanos",
+    feature = "debug_mcu_print",
+    not(feature = "speculos")
+))]
 #[inline(never)]
 pub fn printc(c: u8) {
-    use nanos_sdk::seph::{seph_send,seph_recv};
     use nanos_sdk::bindings::SEPROXYHAL_TAG_PRINTF_STATUS;
-    let mut buf : [u8; 4] = [SEPROXYHAL_TAG_PRINTF_STATUS as u8, 0, 1, c];
+    use nanos_sdk::seph::{seph_recv, seph_send};
+    let mut buf: [u8; 4] = [SEPROXYHAL_TAG_PRINTF_STATUS as u8, 0, 1, c];
     seph_send(&buf[..]);
     seph_recv(&mut buf[..], 0);
     buf[0] = 0;
 }
 
-#[cfg(all(target_family = "nanos", feature = "debug_mcu_print", not(feature = "speculos")))]
+#[cfg(all(
+    target_family = "nanos",
+    feature = "debug_mcu_print",
+    not(feature = "speculos")
+))]
 impl Write for DBG {
     #[inline(never)]
     fn write_str(&mut self, s: &str) -> core::fmt::Result {
@@ -52,7 +62,10 @@ impl Write for DBG {
     }
 }
 
-#[cfg(not(all(target_family = "bolos", not(any(feature = "speculos", feature = "debug_mcu_print")))))]
+#[cfg(not(all(
+    target_family = "bolos",
+    not(any(feature = "speculos", feature = "debug_mcu_print"))
+)))]
 #[macro_export]
 macro_rules! log {
     (target: $target:expr, $lvl:expr, $fmt:literal $($arg:tt)*) => ({
@@ -62,7 +75,10 @@ macro_rules! log {
     ($lvl:expr, $fmt:literal $($arg:tt)*) => (log!(target: __log_module_path!(), $lvl, $fmt $($arg)*))
 }
 
-#[cfg(all(target_family = "bolos", not(any(feature = "speculos", feature = "debug_mcu_print"))))]
+#[cfg(all(
+    target_family = "bolos",
+    not(any(feature = "speculos", feature = "debug_mcu_print"))
+))]
 #[macro_export]
 macro_rules! log {
     (target: $target:expr, $lvl:expr, $fmt:literal $($arg:tt)*) => ({ });
@@ -77,7 +93,7 @@ macro_rules! error {
 #[cfg(not(feature = "log_error"))]
 #[macro_export]
 macro_rules! error {
-    ($fmt:literal $($arg:tt)*) => ({ })
+    ($fmt:literal $($arg:tt)*) => {{}};
 }
 #[cfg(feature = "log_warn")]
 #[macro_export]
@@ -87,7 +103,7 @@ macro_rules! warn {
 #[cfg(not(feature = "log_warn"))]
 #[macro_export]
 macro_rules! warn {
-    ($fmt:literal $($arg:tt)*) => ({ })
+    ($fmt:literal $($arg:tt)*) => {{}};
 }
 #[cfg(feature = "log_info")]
 #[macro_export]
@@ -97,7 +113,7 @@ macro_rules! info {
 #[cfg(not(feature = "log_info"))]
 #[macro_export]
 macro_rules! info {
-    ($fmt:literal $($arg:tt)*) => ({ })
+    ($fmt:literal $($arg:tt)*) => {{}};
 }
 #[cfg(feature = "log_debug")]
 #[macro_export]
@@ -107,7 +123,7 @@ macro_rules! debug {
 #[cfg(not(feature = "log_debug"))]
 #[macro_export]
 macro_rules! debug {
-    ($fmt:literal $($arg:tt)*) => ({ })
+    ($fmt:literal $($arg:tt)*) => {{}};
 }
 #[cfg(feature = "log_trace")]
 #[macro_export]
@@ -117,11 +133,11 @@ macro_rules! trace {
 #[cfg(not(feature = "log_trace"))]
 #[macro_export]
 macro_rules! trace {
-    ($fmt:literal $($arg:tt)*) => ({ })
+    ($fmt:literal $($arg:tt)*) => {{}};
 }
 
 #[test]
 fn test_debug() {
-  debug!("FOO FOO FOO\n");
-  assert_eq!(true, false);
+    debug!("FOO FOO FOO\n");
+    assert_eq!(true, false);
 }
