@@ -22,4 +22,4 @@ log_trace = ["log_debug"]
 
 [patch."https://github.com/LedgerHQ/ledger-nanos-sdk.git".nanos_sdk]
 git = "https://github.com/alamgu/ledger-nanos-sdk.git"
-branch = "support-nix-or-non-nix-toolchain"
+branch = "relocating-loader-w-fixes"

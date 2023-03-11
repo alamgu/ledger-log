@@ -5,7 +5,7 @@
 )))]
 use core::fmt::Write;
 #[cfg(all(target_family = "bolos", feature = "speculos"))]
-use nanos_sdk::debug_print;
+use nanos_sdk::testing::debug_print;
 
 pub struct DBG;
 
