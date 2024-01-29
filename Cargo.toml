@@ -1,6 +1,6 @@
 [package]
 name = "ledger-log"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -9,17 +9,13 @@ edition = "2018"
 arrayvec = { version = "0.7.1", default-features = false }
 
 [target.'cfg(target_family = "bolos")'.dependencies]
-nanos_sdk = { git = "https://github.com/LedgerHQ/ledger-nanos-sdk.git" }
+ledger_device_sdk = "1.4.3"
 
 [features]
-speculos = ["nanos_sdk/speculos"]
+speculos = ["ledger_device_sdk/speculos"]
 debug_mcu_print = []
 log_error = []
 log_warn = ["log_error"]
 log_info = ["log_warn"]
 log_debug = ["log_info"]
 log_trace = ["log_debug"]
-
-[patch."https://github.com/LedgerHQ/ledger-nanos-sdk.git".nanos_sdk]
-git = "https://github.com/alamgu/ledger-nanos-sdk.git"
-branch = "relocating-loader-w-fixes"

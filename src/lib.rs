@@ -3,9 +3,10 @@
     target_family = "nanos",
     not(any(feature = "speculos", feature = "debug_mcu_print"))
 )))]
+#[cfg(all(target_family = "bolos", feature = "speculos"))]
 use core::fmt::Write;
 #[cfg(all(target_family = "bolos", feature = "speculos"))]
-use nanos_sdk::testing::debug_print;
+use ledger_device_sdk::testing::debug_print;
 
 pub struct DBG;
 
@@ -31,8 +32,8 @@ impl Write for DBG {
 ))]
 #[inline(never)]
 pub fn printc(c: u8) {
-    use nanos_sdk::bindings::SEPROXYHAL_TAG_PRINTF_STATUS;
-    use nanos_sdk::seph::{seph_recv, seph_send};
+    use ledger_device_sdk::bindings::SEPROXYHAL_TAG_PRINTF_STATUS;
+    use ledger_device_sdk::seph::{seph_recv, seph_send};
     let mut buf: [u8; 4] = [SEPROXYHAL_TAG_PRINTF_STATUS as u8, 0, 1, c];
     seph_send(&buf[..]);
     seph_recv(&mut buf[..], 0);
