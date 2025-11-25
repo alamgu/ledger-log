@@ -9,7 +9,7 @@ edition = "2018"
 arrayvec = { version = "0.7.1", default-features = false }
 
 [target.'cfg(target_family = "bolos")'.dependencies]
-ledger_device_sdk = "1.4.3"
+ledger_device_sdk = { version = "1.29.0" }
 
 [features]
 speculos = ["ledger_device_sdk/speculos"]
